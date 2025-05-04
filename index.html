@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Guess the Number Game</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #121212;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 10px;
+    }
+
+    #game {
+      background: #1e1e1e;
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.05);
+    }
+
+    input[type="number"] {
+      padding: 10px;
+      font-size: 1rem;
+      width: 100px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 5px;
+      outline: none;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 5px;
+      background: #00aaff;
+      color: #fff;
+      cursor: pointer;
+      margin: 5px;
+    }
+
+    button:hover {
+      background: #008ecc;
+    }
+
+    #message {
+      margin-top: 15px;
+      font-size: 1.2rem;
+    }
+    .prv-scr,.prv,.hint{
+        background: #1e1e1e;
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.05);
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🎲 Guess the Number!</h1>
+  <div id="game">
+    <p>Guess a number between <strong>1 and 10</strong></p>
+    <input type="number" id="userGuess" placeholder="Your guess">
+    <br>
+    <button onclick="checkGuess()">Check</button>
+    <button onclick="resetGame()">Reset</button>
+    <p id="message"></p>
+  </div>
+  <div class="prv-scr">
+    <h2>Hints</h2>
+    <div class="hint"></div>
+    <h3>Previuos Guesses</h3>
+<div class="prv"></div>
+</div>
+
+  <script>
+    let secretNumber = Math.floor(Math.random() * 10) + 1;
+    let attempts = 0;
+    let prv_guess=document.querySelector(".prv")
+    let hnt=document.querySelector(".hint")
+
+    function checkGuess() {
+      const guess = Number(document.getElementById("userGuess").value);
+      const message = document.getElementById("message");
+
+      if (!guess) {
+        message.textContent = "⛔ Please enter a number!";
+        return;
+      }
+
+
+     
+      attempts++;
+      prv(guess);
+
+      if (guess === secretNumber) {
+        message.textContent = `🎉 Correct! You guessed it in ${attempts} attempts.`;
+        message.style.color = "#00ff88";
+        setTimeout(resetGame,2000)
+      } 
+      else if (guess > secretNumber) {
+        message.textContent = "📈 Too high! Try again.";
+        message.style.color = "#ffaa00";
+      } else {
+        message.textContent = "📉 Too low! Try again.";
+        message.style.color = "#ffaa00";
+      }
+      
+      if (attempts==5){
+
+        resetGame(secretNumber);
+        message.textContent = `⛔ YOU HAVE REACHED THE LIMIT and the correvt answer was ${secretNumber}`;
+        message.style.color = "red";
+
+        return;
+      }
+
+    if(attempts>2){
+        hint(secretNumber);
+    }
+
+    }
+
+    function resetGame() {
+      secretNumber = Math.floor(Math.random() * 10) + 1;
+      attempts = 0;
+      document.getElementById("userGuess").value = "";
+      document.getElementById("message").textContent = "";
+      prv_guess.innerHTML = ``;
+      hnt.innerHTML="";
+    }
+
+    function prv(guess) {
+        let p_guess=0;
+        p_guess+=guess;
+  prv_guess.innerHTML += `<p>Your previous guess was ${p_guess}</p>`;
+  
+}
+function hint (secretNumber){
+    let correctno=secretNumber;
+    let no1=Math.floor(Math.random() * 10) + 1;
+    let no2=Math.floor(Math.random() * 10) + 1;
+    let nos=[correctno,no1,no2]
+
+    hnt.innerHTML = `<p> Hints are ${nos}</p>`;
+   
+}
+
+
+  </script>
+
+</body>
+</html>
